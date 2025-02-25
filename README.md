@@ -74,3 +74,5 @@ Example Response Data (JSON)
     "is_secure": true,
     "feedback": ["Strong password!"]
 }
+```
+![image](https://github.com/user-attachments/assets/ed14f480-0600-46a7-8e2b-5f911c6a707c)
