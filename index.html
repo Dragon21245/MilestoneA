@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Strength Checker</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>Password Strength Test</h1>
+    
+    <div class="form-group">
+        <label for="username">Username (optional):</label>
+        <input type="text" id="username" placeholder="Enter your username">
+    </div>
+
+    <div class="form-group">
+        <label for="password">Enter Password:</label>
+        <input type="password" id="password" placeholder="Enter password">
+        <button onclick="checkPassword()">Check Strength</button>
+    </div>
+
+    <div id="result" class="result-box"></div>
+</div>
+
+<script>
+    async function checkPassword() {
+        const password = document.getElementById("password").value;
+        const username = document.getElementById("username").value;
+        const resultBox = document.getElementById("result");
+
+        if (!password) {
+            resultBox.innerHTML = "<p style='color:red;'>Please enter a password.</p>";
+            return;
+        }
+
+        try {
+            const response = await fetch("http://localhost:5000/check_password", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ password, username })
+            });
+
+            const result = await response.json();
+
+            let strengthColor = "red";
+            if (result.strength_score >= 80) strengthColor = "green";
+            else if (result.strength_score >= 50) strengthColor = "orange";
+
+            resultBox.innerHTML = `
+                <p><strong>Strength Score:</strong> <span style="color:${strengthColor};">${result.strength_score}</span></p>
+                <p><strong>Secure:</strong> ${result.is_secure ? "✅ Yes" : "❌ No"}</p>
+                <p><strong>Feedback:</strong> ${result.feedback.join("<br>")}</p>
+            `;
+
+        } catch (error) {
+            console.error("Error fetching password strength:", error);
+            resultBox.innerHTML = "<p style='color:red;'>Error connecting to the microservice.</p>";
+        }
+    }
+</script>
+
+</body>
+</html>
