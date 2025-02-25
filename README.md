@@ -49,7 +49,7 @@ socket.send_json(request_data)
 # Receive response
 response = socket.recv_json()
 print("Password Strength Response:", response)
-
+```
 
 B) How to Programmatically RECEIVE Data
 To RECEIVE data from the microservice, you must listen for the response after sending a request.
@@ -62,6 +62,7 @@ is_secure (Boolean): Whether the password meets security criteria.
 feedback (List of strings): Suggestions for improving password security.
 
 Example Response Handling (Python)
+```
 response = socket.recv_json()
 print("Password Strength:", response["strength_score"])
 print("Is Secure:", response["is_secure"])
